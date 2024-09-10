@@ -1,0 +1,84 @@
+.todo{
+    min-height: 550px;
+    width: 800px;
+    margin: 15px auto;
+    background-color: white;
+    padding: 10px 25px 25px 25px;
+
+
+    .todo__buttonBlock{
+        width: 100%;
+        text-align: center;
+        height: 40px;
+    }
+
+    .todo__task{
+        margin-top: 15px;
+        width: 100%;
+        min-height: 485px;
+        .todo__accordion{
+            background: linear-gradient(
+                45deg,
+                rgba(128, 128, 128, 0.2), /* серый с прозрачностью 0.1 */
+                rgba(144, 238, 144, 0.3)  /* салатовый с прозрачностью 0.2 */
+              );
+
+
+              .todo__button{
+                position: absolute;
+                top: 5px;
+                right: 0;
+                width: 25px;
+                height: 25px;
+                cursor: pointer;
+                border: none;
+                background: none;
+            }
+        
+            .todo__button::before,
+        .todo__button::after {
+          content: '';
+          position: absolute;
+          width: 15px;
+          height: 2px;
+          background-color: black;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+        }
+        
+        .todo__button::before {
+          transform: translateY(-50%) rotate(45deg);
+        }
+        
+        .todo__button::after {
+          transform: translateY(-50%) rotate(-45deg);
+        }
+              
+
+            .todo__tast__title{
+                font-size: 12px;
+                text-transform: uppercase;
+                margin: 0;
+             }
+
+             .todo__dateCreation{
+                font-size: 10px;
+                position: absolute; /* Абсолютное позиционирование */
+                left: 50%;
+                transform: translateX(-50%);
+             }
+
+             .todo__category{
+              font-size: 10px;
+              position: absolute;
+              left: 80%;
+              transform: translateX(-80%);
+             }
+
+                
+        }
+
+      
+    }
+}
