@@ -10,6 +10,8 @@ import { useGetAllTasksQuery, useDeleteTaskMutation } from '../../redux/slice/ap
 import { CustomError } from '../../redux/slice/typesData';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import { useCreateNewDiscussionMutation } from '../../redux/slice/apiCommentsTaskSlice';
+
 
 
 
@@ -21,6 +23,28 @@ function ToDo(){
     const fetchTypeErr = error as CustomError;
     const [deleteTask, {data: newTaskDelete, error: newError}] = useDeleteTaskMutation();
     const baseUrl = 'http://localhost:8000/'; // URL вашего бэкенд-сервера
+    const [createNewDiscussion, {data: newDiscussion}] = useCreateNewDiscussionMutation();
+   
+    function sendTaskData(index: number): void{
+        try {
+            const information = {
+                title: dataTasks[index].nameTask,
+                description: dataTasks[index].contentTask
+            }
+
+            if(information.description && information.title){
+                createNewDiscussion(information).unwrap();
+            } else {
+                if(!information.description){
+                    alert('Заполните описание задачи, а затем отправляйте');
+                }
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     
 
     useEffect(()=>{
@@ -60,7 +84,7 @@ function ToDo(){
              <Paper elevation={5} className='todo__task'>
 
                 {
-                    dataTasks.map((item, index)=>{
+                    dataTasks.map((item, index, arr)=>{
                        return(
 
                         <Accordion key={index} className='todo__accordion'>
@@ -90,8 +114,11 @@ function ToDo(){
                              <p style={{width: '350px'}}>{item.contentTask}</p> 
                             </div>
                             <Button style={{margin: '0 auto', display: 'block'}} variant="outlined">Редактировать задачу</Button>
-                            <Button style={{margin: '10px auto', display: 'block'}} variant="outlined">Отправить задачу на обсуждение</Button>
-                            
+                            <Button 
+                                   style={{margin: '10px auto', display: 'block'}} 
+                                   variant="outlined"
+                                   onClick={()=>{sendTaskData(index)}}>Отправить задачу на обсуждение
+                                   </Button>
                              
                         </AccordionDetails>
                      </Accordion>

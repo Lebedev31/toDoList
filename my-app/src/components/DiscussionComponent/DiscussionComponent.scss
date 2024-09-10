@@ -1,0 +1,14 @@
+.discussion{
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    .discussion__panel{
+        margin: 10px auto;
+        width: 400px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+}

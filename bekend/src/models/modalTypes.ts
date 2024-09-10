@@ -41,3 +41,19 @@ export interface TaskDocument extends Task, Document {
     _id: string
 }
 
+export  interface CommentsTask{
+   title: string;
+   description: string;
+   like?: number;
+   comments?: AutorComments[];
+}
+
+export type AutorComments = {
+    name: string;
+    avatar: string;
+    chekLike: boolean;
+
+}
+
+
+

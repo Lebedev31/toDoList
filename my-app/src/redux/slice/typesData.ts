@@ -64,3 +64,7 @@ export type PersonalAreaTypeResponse = {
   personalArea: PersonalAreaObject;
 };
 
+export type TaskCommentRequest = {
+    title: string;
+    description: string;
+}
