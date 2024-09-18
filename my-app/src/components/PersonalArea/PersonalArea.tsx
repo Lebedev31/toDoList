@@ -21,6 +21,8 @@ function PersonalArea(){
     const [uploadAvatarPersonalData] = useUploadAvatarPersonalDataMutation();
     const baseUrl = 'http://localhost:8000/';
 
+    console.log(responseData);
+
 
     useEffect(()=>{
        if(file){

@@ -1,6 +1,7 @@
 import {Schema, model} from "mongoose";
+import { User } from "./modalTypes";
 
-const UserShema = new Schema({
+const UserShema = new Schema<User>({
     login: {
         type: String,
         required: true,

@@ -68,3 +68,21 @@ export type TaskCommentRequest = {
     title: string;
     description: string;
 }
+
+export type TaskCommentResponse = {
+    title: string;
+    description: string;
+    like?: number;
+    comments: Comment[];
+    _id: string;
+}
+
+type Comment = {
+    name: string;
+    avatar: string;
+    chekLike: boolean;
+}
+
+export type Comments = {
+    comments: TaskCommentResponse[];
+}

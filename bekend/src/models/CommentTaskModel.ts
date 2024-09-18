@@ -16,7 +16,17 @@ const AutorCommentsSchema = new Schema<AutorComments>({
     chekLike: {
        type: Boolean,
        required: true
+    },
+
+    commentsArr: {
+      type: [String]
+    },
+
+    id: {
+      type: String,
+      required: true
     }
+
 })
 
 const CommentModal = new Schema<CommentsTask>({
@@ -32,6 +42,12 @@ const CommentModal = new Schema<CommentsTask>({
 
    like: {
     type: Number,
+    required: true
+   },
+
+   authorId: {
+      type: String,
+      required: true
    },
 
    comments:{

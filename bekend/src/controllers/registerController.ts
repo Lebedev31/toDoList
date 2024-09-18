@@ -25,7 +25,8 @@ async function registerController(req: Request, res: Response){
           const newUser = new UserModal({
             login,
             password: hashPassword,
-            name
+            name,
+            personalArea: {}
           });
 
          const savedUser = await newUser.save();

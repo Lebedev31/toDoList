@@ -8,10 +8,39 @@ import { Typography } from '@mui/material';
 import { styleAccordion } from './style';
 import Button from '@mui/material/Button';
 import CommentsComponent from './CommentsComponent';
+import { useGetAllDiscussionQuery } from '../../redux/slice/apiCommentsTaskSlice';
+import {useState, useEffect} from 'react';
+import {TaskCommentResponse } from '../../redux/slice/typesData';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { useCheckLikesMutation } from '../../redux/slice/apiCommentsTaskSlice';
 
 function DiscussionComponent(){
+    const [dataArray, setDataArray] = useState<TaskCommentResponse[]>([]);
+    const {data, error, isLoading} = useGetAllDiscussionQuery(undefined, {
+        refetchOnMountOrArgChange: true
+    });
 
-    const arr = [1, 2 , 3];
+    console.log(dataArray);
+
+    const [checkLikes] = useCheckLikesMutation();
+
+    function requestLikes(str: string) {
+        try {
+           checkLikes(str).unwrap();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+
+    useEffect(()=>{
+
+        if(data){
+            setDataArray(data.comments);
+        }
+
+    }, [data])
+
     return(
         <>
           <Header/>
@@ -21,7 +50,7 @@ function DiscussionComponent(){
                             <Button variant='contained'>Обсуждаемое</Button>
                     </div>
 
-                    {arr.map((item, index)=>{
+                    {dataArray.map((item, index)=>{
                    return (
                     <Accordion key={index}sx={styleAccordion} >
     
@@ -30,14 +59,19 @@ function DiscussionComponent(){
                                      aria-controls="panel-content"
                                      expandIcon={<ExpandMoreIcon />}
                                      >
-                       <Typography>Тема: </Typography>
+                       <Typography>Тема: {item.title} </Typography>
                     </AccordionSummary>
                     <AccordionDetails > 
                     <Typography>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi earum adipisci mollitia 
-                        provident similique. Aspernatur explicabo nulla pariatur iusto recusandae, 
-                        dolore fugiat est porro quam obcaecati odio numquam, nemo quaerat?</Typography>
-                        <CommentsComponent/>
+                       {item.description}
+                    </Typography>
+                    <div style={{marginTop: '7px', display: 'flex', width: '10px',  gap: '10px'}}>
+                            {0}: <ThumbUpIcon sx={{color: 'blue', marginTop: '-2px', cursor: 'pointer'}}
+                                              onClick={()=> requestLikes(dataArray[index]._id)}/>
+                    </div>
+
+                    <CommentsComponent/>
+                   
         
                    </AccordionDetails>
                </Accordion>

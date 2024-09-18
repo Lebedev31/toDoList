@@ -4,8 +4,10 @@ import { useLocation } from 'react-router-dom';
 
 function Header(){
     const location = useLocation();
-    const mainTransition = location.pathname === '/personalArea' || '/discussion'? 'Назад к задачам' : 'Назад в меню авторизации';
-    const mainTransitionPatch = location.pathname === '/personalArea' || '/discussion' ? '/main' : '/';
+    const mainTransition = location.pathname === '/personalArea' && '/discussion'? 'Назад к задачам' : 'Назад в меню авторизации';
+    const mainTransitionPatch = location.pathname === '/personalArea' && '/discussion' ? '/main' : '/';
+
+    console.log(mainTransitionPatch);
 
     return (
         <header className='header'>
