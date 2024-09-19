@@ -4,6 +4,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Button from '@mui/material/Button';
+
 
 function CommentsComponent(){
     return (
@@ -15,10 +17,13 @@ function CommentsComponent(){
             </AccordionSummary>
 
             <AccordionDetails>
+
+              
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
                     Laborum vitae quasi soluta porro. Veritatis exercitationem cum, 
                     maxime itaque doloremque labore dignissimos consequatur odio. Recusandae,
                      fugiat deserunt ipsam explicabo consequuntur quas?
+
                 </AccordionDetails>
         </Accordion>
     )

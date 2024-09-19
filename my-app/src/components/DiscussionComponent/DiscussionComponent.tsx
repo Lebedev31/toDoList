@@ -16,13 +16,13 @@ import { useCheckLikesMutation } from '../../redux/slice/apiCommentsTaskSlice';
 
 function DiscussionComponent(){
     const [dataArray, setDataArray] = useState<TaskCommentResponse[]>([]);
-    const {data, error, isLoading} = useGetAllDiscussionQuery(undefined, {
+    const {data, error, isLoading, refetch} = useGetAllDiscussionQuery(undefined, {
         refetchOnMountOrArgChange: true
     });
 
-    console.log(dataArray);
+    const [commantsArr, setCommentsArr] = useState<string[]>();
 
-    const [checkLikes] = useCheckLikesMutation();
+    const [checkLikes, {data: likeUpdate}] = useCheckLikesMutation();
 
     function requestLikes(str: string) {
         try {
@@ -31,6 +31,13 @@ function DiscussionComponent(){
             console.log(error);
         }
     }
+
+    useEffect(()=>{
+        if(dataArray){
+            const comments = dataArray.flatMap(item => item.comments.flatMap(item2 => item2.commentsArr));
+            setCommentsArr(comments);
+        }
+    }, [dataArray])
     
 
     useEffect(()=>{
@@ -39,7 +46,13 @@ function DiscussionComponent(){
             setDataArray(data.comments);
         }
 
-    }, [data])
+    }, [data]);
+
+    useEffect(()=>{
+       if(likeUpdate){
+          setDataArray(likeUpdate.comments)
+       }
+    }, [likeUpdate])
 
     return(
         <>
@@ -63,10 +76,12 @@ function DiscussionComponent(){
                     </AccordionSummary>
                     <AccordionDetails > 
                     <Typography>
-                       {item.description}
+                       <div className='discussion__description'>
+                          {item.description}
+                       </div>
                     </Typography>
                     <div style={{marginTop: '7px', display: 'flex', width: '10px',  gap: '10px'}}>
-                            {0}: <ThumbUpIcon sx={{color: 'blue', marginTop: '-2px', cursor: 'pointer'}}
+                            {item.like}: <ThumbUpIcon sx={{color: 'blue', marginTop: '-2px', cursor: 'pointer'}}
                                               onClick={()=> requestLikes(dataArray[index]._id)}/>
                     </div>
 

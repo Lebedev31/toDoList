@@ -32,7 +32,7 @@ endpoints: (builder) => ({
         })
       }), 
 
-    checkLikes: builder.mutation<void, string>({
+    checkLikes: builder.mutation<Comments, string>({
         query: (id)=>({
             url: '/checkLikes',
             method: 'PATCH',

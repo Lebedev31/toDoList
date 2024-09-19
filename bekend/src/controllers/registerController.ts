@@ -26,7 +26,13 @@ async function registerController(req: Request, res: Response){
             login,
             password: hashPassword,
             name,
-            personalArea: {}
+            personalArea: {
+              namePersonal: '',
+              surname: '',
+              email: '',
+              nikName: '',
+              logo: ''
+            }
           });
 
          const savedUser = await newUser.save();

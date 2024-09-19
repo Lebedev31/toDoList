@@ -52,7 +52,7 @@ export  interface CommentsTask{
 export type AutorComments = {
     name: string;
     avatar: string;
-    chekLike: boolean;
+    checkLike: boolean;
     commentsArr: string [];
     id: string
 }

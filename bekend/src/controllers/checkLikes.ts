@@ -27,7 +27,7 @@ async function checkLikes(req: Request, res: Response){
 
            const update =  await CommentTaskModel.findByIdAndUpdate(
                 commentId, 
-                {$push:{comments: {name: `${name}`, avatar: `${avatar}`, chekLike: true, commentsArr: [], id: userId}}},
+                {$push:{comments: {name: `${name}`, avatar: `${avatar}`,  checkLike: true, commentsArr: [], id: userId}}},
                 {upsert: true}
              )
             
@@ -46,26 +46,34 @@ async function checkLikes(req: Request, res: Response){
 
            if(examinationCommentAuthor){
                const updateLike = comment[0].comments?.find((item)=> item.id === userId);
+
+              
                if(updateLike){
+               
+
+                if (updateLike.checkLike === true) {
                     
-                   if(updateLike.chekLike){
+                    await CommentTaskModel.findOneAndUpdate(
+                        {_id: commentId, "comments.id": userId},
+                        {$inc: {like: - 1}, 
+                         $set: {"comments.$.checkLike": false}}
+                    );
+                     
+                } 
+                
+               if(updateLike.checkLike === false){
+                
+                    await CommentTaskModel.findOneAndUpdate(
+                        {_id: commentId, "comments.id": userId},
+                        {$inc: {like: 1}, 
+                        $set: {"comments.$.checkLike": true}}
+                        );
+                  
+                }
 
-                    const likes = comment[0].like - 1;
-                         await CommentTaskModel.findByIdAndUpdate(
-                            commentId,
-                            {$set: {like: likes}}
-                        )
-
-                   } else {
-                        const likes = comment[0].like + 1;
-                        await CommentTaskModel.findByIdAndUpdate(
-                            commentId,
-                            {$set: {like: likes}}
-                        )
-
-                   }
-
-                   res.status(200).json({message: 'Количество лайков успешно изменено'});
+                const responseUpdate = await CommentTaskModel.find();
+                 
+                   res.status(200).json({comments: responseUpdate});
                }
            }
 
@@ -81,9 +89,10 @@ async function checkLikes(req: Request, res: Response){
         return res.status(401).json({message: 'По всей видимости поста или юзера не существует'});
     }
     
-
+    
     
    } catch (error) {
+      return res.status(500).json({message: "Ошибочка на сервере"});
     
    }
 }

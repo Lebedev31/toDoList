@@ -81,6 +81,8 @@ type Comment = {
     name: string;
     avatar: string;
     chekLike: boolean;
+    commentsArr: string [];
+    id: string;
 }
 
 export type Comments = {

@@ -17,11 +17,12 @@ function PersonalArea(){
     const [createPersonalData, {data}] = useCreatePersonalDataMutation();
     const [valueTextField, setValueTextField] = useState('');
     const [responseData, setResponseData] = useState<string[]>();
-    const {isLoading, error: getError, data: getData, refetch} = useGetAllDataQuery();
+    const {isLoading, error: getError, data: getData, refetch} = useGetAllDataQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+    });
     const [uploadAvatarPersonalData] = useUploadAvatarPersonalDataMutation();
     const baseUrl = 'http://localhost:8000/';
 
-    console.log(responseData);
 
 
     useEffect(()=>{

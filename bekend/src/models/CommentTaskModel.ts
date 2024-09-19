@@ -13,7 +13,7 @@ const AutorCommentsSchema = new Schema<AutorComments>({
        required: true
     },
 
-    chekLike: {
+   checkLike: {
        type: Boolean,
        required: true
     },
