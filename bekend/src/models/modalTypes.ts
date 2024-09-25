@@ -57,5 +57,10 @@ export type AutorComments = {
     id: string
 }
 
+export type CreateComment = {
+    id: string;
+    comment: string;
+
+}
 
 

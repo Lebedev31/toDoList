@@ -12,10 +12,24 @@
     }
 
     .discussion__description{
-        width: 100%;
-        padding: 10px;
-        background-color: white;
         font-size: 14px;
+    }
+
+    .comment__form{
+        width: 300px;
+        min-height: 200px;
+        margin: 10px;
+        textarea {
+            resize: none;
+            width: 100%;
+            min-height: 50px;
+        }
+    }
+
+    .comment_author{
+        display: flex;
+        height: 30px;
+        align-items: center;
     }
 
 }

@@ -24,7 +24,6 @@ function PersonalArea(){
     const baseUrl = 'http://localhost:8000/';
 
 
-
     useEffect(()=>{
        if(file){
           const formData = new FormData;

@@ -13,6 +13,7 @@ import {useState, useEffect} from 'react';
 import {TaskCommentResponse } from '../../redux/slice/typesData';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { useCheckLikesMutation } from '../../redux/slice/apiCommentsTaskSlice';
+import { useLocation } from 'react-router-dom';
 
 function DiscussionComponent(){
     const [dataArray, setDataArray] = useState<TaskCommentResponse[]>([]);
@@ -20,9 +21,17 @@ function DiscussionComponent(){
         refetchOnMountOrArgChange: true
     });
 
-    const [commantsArr, setCommentsArr] = useState<string[]>();
+    function getTaskId(num: number): string{
+        return dataArray[num]._id;
+    }
 
-    const [checkLikes, {data: likeUpdate}] = useCheckLikesMutation();
+
+    const location = window.location;
+    console.log(location);
+
+    const [commentsArr, setCommentsArr] = useState<string[]>([]);
+
+    const [checkLikes, {data: likeUpdate, isLoading: loadingLike}] = useCheckLikesMutation();
 
     function requestLikes(str: string) {
         try {
@@ -33,7 +42,7 @@ function DiscussionComponent(){
     }
 
     useEffect(()=>{
-        if(dataArray){
+        if(dataArray && !isLoading){
             const comments = dataArray.flatMap(item => item.comments.flatMap(item2 => item2.commentsArr));
             setCommentsArr(comments);
         }
@@ -49,7 +58,7 @@ function DiscussionComponent(){
     }, [data]);
 
     useEffect(()=>{
-       if(likeUpdate){
+       if(likeUpdate && !loadingLike){
           setDataArray(likeUpdate.comments)
        }
     }, [likeUpdate])
@@ -76,16 +85,16 @@ function DiscussionComponent(){
                     </AccordionSummary>
                     <AccordionDetails > 
                     <Typography>
-                       <div className='discussion__description'>
+                       <span className='discussion__description'>
                           {item.description}
-                       </div>
+                       </span>
                     </Typography>
                     <div style={{marginTop: '7px', display: 'flex', width: '10px',  gap: '10px'}}>
                             {item.like}: <ThumbUpIcon sx={{color: 'blue', marginTop: '-2px', cursor: 'pointer'}}
                                               onClick={()=> requestLikes(dataArray[index]._id)}/>
                     </div>
 
-                    <CommentsComponent/>
+                    <CommentsComponent getTaskId={getTaskId} commentsArr={commentsArr}/>
                    
         
                    </AccordionDetails>

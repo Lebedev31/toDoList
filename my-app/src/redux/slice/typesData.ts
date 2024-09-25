@@ -88,3 +88,8 @@ type Comment = {
 export type Comments = {
     comments: TaskCommentResponse[];
 }
+
+export type CreateComment = {
+    id: string;
+    comment: string;
+}

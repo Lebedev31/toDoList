@@ -1,5 +1,5 @@
 import {fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
-import { TaskCommentRequest, Comments } from "./typesData";
+import { TaskCommentRequest, Comments, CreateComment } from "./typesData";
 
 
 export const apiCommentsTaskSlice = createApi({
@@ -38,11 +38,23 @@ endpoints: (builder) => ({
             method: 'PATCH',
             body: id
         })
-      }), 
+      }),
+
+      createComment: builder.mutation<Comments, CreateComment>({
+        query: (id)=>({
+            url: '/createComment',
+            method: 'POST',
+            body: id
+        })
+      }),
+      
 
     }),
 
 });
 
-export const {useCreateNewDiscussionMutation, useGetAllDiscussionQuery, useCheckLikesMutation} = apiCommentsTaskSlice;
+export const {useCreateNewDiscussionMutation, 
+              useGetAllDiscussionQuery,
+              useCheckLikesMutation,
+              useCreateCommentMutation} = apiCommentsTaskSlice;
 
