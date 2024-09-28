@@ -30,6 +30,10 @@ async function createComment(req: Request, res: Response){
             {_id: comment.id, "comments.id": userId},
             {$push: {"comments.$.commentsArr": comment.comment}}
            );
+
+           const createComment = await CommentTaskModel.find();
+
+           return res.status(200).json({comments: createComment});
         } 
 
         if(!findAuthorComment){
@@ -39,7 +43,7 @@ async function createComment(req: Request, res: Response){
 
              const update = await CommentTaskModel.findByIdAndUpdate(
                  comment.id, 
-                {$push:{comments: {name: `${user?.personalArea?.nikName}`, avatar: `${user?.personalArea?.logo}`,  checkLike: true, commentsArr: [], id: userId}}},
+                {$push:{comments: {name: `${user?.personalArea?.nikName}`, avatar: `${user?.personalArea?.logo}`,  checkLike: false, commentsArr: [], id: userId}}},
                 {upsert: true}
              );
 
@@ -48,7 +52,11 @@ async function createComment(req: Request, res: Response){
                 await CommentTaskModel.updateOne(
                     {_id: comment.id, "comments.id": userId},
                     {$push: {"comments.$.commentsArr": comment.comment}}
-                )
+                );
+
+                const createComment = await CommentTaskModel.find();
+
+                return res.status(200).json({comments: createComment});
              }
 
             } else{

@@ -10,10 +10,11 @@ import Button from '@mui/material/Button';
 import CommentsComponent from './CommentsComponent';
 import { useGetAllDiscussionQuery } from '../../redux/slice/apiCommentsTaskSlice';
 import {useState, useEffect} from 'react';
-import {TaskCommentResponse } from '../../redux/slice/typesData';
+import {TaskCommentResponse, Comment } from '../../redux/slice/typesData';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { useCheckLikesMutation } from '../../redux/slice/apiCommentsTaskSlice';
-import { useLocation } from 'react-router-dom';
+
+
 
 function DiscussionComponent(){
     const [dataArray, setDataArray] = useState<TaskCommentResponse[]>([]);
@@ -21,15 +22,7 @@ function DiscussionComponent(){
         refetchOnMountOrArgChange: true
     });
 
-    function getTaskId(num: number): string{
-        return dataArray[num]._id;
-    }
-
-
-    const location = window.location;
-    console.log(location);
-
-    const [commentsArr, setCommentsArr] = useState<string[]>([]);
+    const [commentsArr, setCommentsArr] = useState<Comment[][]>([]);
 
     const [checkLikes, {data: likeUpdate, isLoading: loadingLike}] = useCheckLikesMutation();
 
@@ -43,9 +36,10 @@ function DiscussionComponent(){
 
     useEffect(()=>{
         if(dataArray && !isLoading){
-            const comments = dataArray.flatMap(item => item.comments.flatMap(item2 => item2.commentsArr));
-            setCommentsArr(comments);
+          const comment = dataArray.map(item => item.comments);
+          setCommentsArr(comment);
         }
+       
     }, [dataArray])
     
 
@@ -61,7 +55,9 @@ function DiscussionComponent(){
        if(likeUpdate && !loadingLike){
           setDataArray(likeUpdate.comments)
        }
-    }, [likeUpdate])
+    }, [likeUpdate]);
+
+   
 
     return(
         <>
@@ -94,7 +90,10 @@ function DiscussionComponent(){
                                               onClick={()=> requestLikes(dataArray[index]._id)}/>
                     </div>
 
-                    <CommentsComponent getTaskId={getTaskId} commentsArr={commentsArr}/>
+                    <CommentsComponent 
+                                      idComment={dataArray[index]._id} 
+                                      commentsArr={commentsArr[index]}
+                                      setDataArray={setDataArray}/>
                    
         
                    </AccordionDetails>

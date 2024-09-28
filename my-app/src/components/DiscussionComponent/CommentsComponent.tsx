@@ -7,23 +7,34 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import {useState, useEffect} from 'react';
 import { useCreateCommentMutation } from '../../redux/slice/apiCommentsTaskSlice';
+import { Comment } from '../../redux/slice/typesData';
+import { TaskCommentResponse } from '../../redux/slice/typesData';
+
 
 type PropsComment = {
-    getTaskId: (num: number) => string;
-    commentsArr: string[];
+    idComment: string;
+    commentsArr: Comment[];
+    setDataArray: React.Dispatch<React.SetStateAction<TaskCommentResponse[]>>;
 }
 
-function CommentsComponent({getTaskId, commentsArr}: PropsComment){
+function CommentsComponent({idComment, commentsArr, setDataArray}: PropsComment){
 
     const [valueTextArea, setValueTextArea] = useState('');
-    const [createComment , {error}] = useCreateCommentMutation();
+    const [createComment , {error, data}] = useCreateCommentMutation();
     const baseUrl = 'http://localhost:8000/';
 
-    function requestFormComment(e: React.FormEvent<HTMLFormElement>, num: number): void{
-        e.preventDefault();
-        const id = getTaskId(num);
-        try {
+    useEffect(()=>{
 
+        if(data){
+           setDataArray(data.comments);
+        }
+
+    }, [data])
+
+    function requestFormComment(e: React.FormEvent<HTMLFormElement>): void{
+        e.preventDefault();
+        try {
+            const id = idComment;
           if(valueTextArea.length !== 0){
             createComment({id, comment: valueTextArea}).unwrap().catch((error)=>{ console.log(error)});
             setValueTextArea('');
@@ -47,17 +58,26 @@ function CommentsComponent({getTaskId, commentsArr}: PropsComment){
             </AccordionSummary>
 
             <AccordionDetails>
-              
-                  {commentsArr.length !== 0 ? commentsArr.map((item, index)=> {
-                      return (
-                        <div key={index} className='comment_author'>
-                            <Typography>{item}</Typography>
-                        </div>
-                        
-                      )
-                  }): null}
+                {commentsArr?.length !== 0 && commentsArr !== undefined ? commentsArr.map((item, index)=> {
+                   return item.commentsArr.map((item2, index)=>{
+                        return (
+                            <div key={index} className='comment_author'>
+                                <p className='comment_name'>{item.name}</p>
+                                <div className='comment_avatar'>
+                                        <img src={`${baseUrl + item.avatar.slice(5)}`} alt="" />
+                                </div>
+                                <Typography sx={{width: '400px'}}>{item2}</Typography>
+                                
+                            </div>
+                            
 
-                    <form className='comment__form' onSubmit={(e)=> requestFormComment(e, 0)}>
+                        )
+                    })
+                    
+                }): null}
+                      
+                  
+                    <form className='comment__form' onSubmit={requestFormComment}>
                         <textarea value={valueTextArea} onChange={handleTextArea}></textarea>
                         <Button type='submit' variant="contained">Добавить комментарий</Button>
                     </form>

@@ -40,7 +40,9 @@ async function checkLikes(req: Request, res: Response){
                 )
              }
             
-             return res.status(200).json({message: "Вы поставили лайк"});
+             const responseUpdate = await CommentTaskModel.find();
+                 
+             res.status(200).json({comments: responseUpdate});
 
            }   
 

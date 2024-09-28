@@ -77,7 +77,7 @@ export type TaskCommentResponse = {
     _id: string;
 }
 
-type Comment = {
+export type Comment = {
     name: string;
     avatar: string;
     chekLike: boolean;
